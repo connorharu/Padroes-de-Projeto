@@ -143,4 +143,21 @@ int main() {
 }
 ```
 
-##
+## Structural Patterns - Decorator
+O padrão _decorator_, ou _wrapper_, é um design de padrão estrutural utilizado para acoplar novos comportamentos em objetos, colocando estes mesmos objetos dentro de um invólucro especial que contenha esses comportamentos.
+### Caracterização do problema
+Com as possíveis mudanças de uma classe e implementação de novas necessidades, há uma grande chance de que o código se torne _bloated_. Portanto, torna-se necessária outra maneira de organizar o código, a fim de que não exista código duplicado, dificuldade na composição das fucnionalidades específicas de objetos ou que o princípio _open/closed_ seja violado para modificação da classe base, facilitando a manutenção do código.
+### Solução para o problema
+Deve-se priorizar o uso de agregação ou composição ao invés de herança. Na agregação, o objeto teria uma referencia para uma outra e encarregaria algumas de suas funções à ela, e na composição, o objeto conseguiria fazer esse trabalho sozinho, herdando o comportamento da sua superclasse. Com essa solução, se torna possível substituir o objeto de suporte vinculado assim que necessário, alterando o comportamento em tempo de execução. Dessa maneira, um objeto teria acesso ao comportamento de várias classes, referências à múltiplos objetos e poderia encarregá-los com suas funções.
+
+A função de suporte seria o _wrapper_, um padrão do decorador que deixa explícito o uso do padrão. Ele pode ser vinculado com um objeto específico. O embrulho possui todos os métodos que o objeto específico, encarregando esse objeto com todas as suas funções. Portanto, para o cliente, eles são idênticos. No entanto, ele pode realizar ações antes ou depois de entregar o pedido para o objeto, similarmente com um construtor/destrutor dentro de uma classe. Pense como se fosse uma boneca russa: um_ wrapper_ dentro de outro _wrapper_ dentro de outro..., e no fundo, o objeto em específico. O _wrapper_ aceitará qualquer objeto que siga a mesma interface do objeto encapsulado, permitindo adicionar _wrappers_ com funcionalidades adicionais de forma dinâmica e flexível.
+
+Por exemplo, pense em um café preto comum: esse será o objeto que encapsularemos. Podemos colocar um _wrapper_ para a adição de leite, outro para a adição de açúcar, outro para a adição de canela... Como uma boneca russa.
+
+![structure](https://github.com/connorharu/Padroes-de-Projeto/assets/142368559/e2c8c1e9-e759-4672-976c-7cade7b1787f)
+
+_Texto ALT: diagrama UML sobre o padrão de criação Decorator. Imagem retirada do site refactoring.guru_.
+
+### Código de exemplo
+```cpp
+```
