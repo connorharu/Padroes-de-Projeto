@@ -239,4 +239,97 @@ int main() {
     return 0;
 }
 ```
-## 
+## Behavioral Patterns - Chain of Responsibility
+A corrente da responsabilidade é um design de padrão de comportamento que visa evitar acoplamento excessivo entre o remetente de uma solicitação e o receptor dessa solicitação, te permitindo passar pedidos por uma "corrente" de _handlers_. Cada _handler_ pode decidir se irá processar o pedido, ou passar para o próximo da fila.
+### Caracterização do problema
+Após suficientes adições de novas partes à um código, ele poderá se tornar complexo, repetindo várias partes e repleto de interdependências frágeis. Ele pode se tornar caro de manter e difícil de compreender, necessitando que seja refeito do zero. O remetente da solicitação precisará conhecer explicitamente todos os possíveis receptores da solicitação. 
+### Solução para o problema
+O _chain of responsibility_ depende da transformação de certos comportamentos em objetos chamados _handlers_. Os _handlers_ estarão vinculados em uma espécie de corrente. Por exemplo, em um restaurante, a comanda de um cliente seria a solicitação. O primeiro elo na cadeia de responsabilidade seria o garçom, que receberá a solicitação do cliente, mas a passará para frente, pois não tem a autoridade para resolvê-la. O próximo elo seria o gerente, que lidará com situações mais complexas se assim for necessário. O último elo será o chef, que tem a autoridade para fazer modificações nos pratos de acordo com as solicitações recebidas de remetentes - clientes.
+
+A solicitação passará pela corrente até que todos os _handlers_ tenham tido uma chance de processá-lo - no entanto, se um _handler_ quiser, ele poderá decidir não passar a solicitação para frente, parando as próximas etapas do processamento. Um exemplo seria um gerente informando alguns clientes insatisfeitos sobre a impossibilidade de realizar o pedido de um certo prato, cancelando a comanda coletada pelo garçom.
+
+É crucial que todas as classes de _handlers_ implementem a mesma interface. 
+
+![image](https://github.com/connorharu/Padroes-de-Projeto/assets/142368559/48c002f6-68d7-4e69-955e-b5da23380539)
+
+_Texto ALT: diagrama UML sobre o padrão de comportamento Chain of Responsibility. Imagem retirada do site refactoring.guru_.
+
+### Código de exemplo
+```cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// classe base: manipulador de solicitação
+class ManipuladorSolicitacao {
+protected:
+    ManipuladorSolicitacao* proximo; // aponta para um objeto de tipo ManipuladorSolicitacao
+public:
+    ManipuladorSolicitacao() {
+        this->proximo = nullptr; // por enquanto, não há próximo na cadeia assignado.
+    }
+    void setProximo(ManipuladorSolicitacao* prox) {
+        proximo = prox; // assigna o proximo da cadeia
+    }
+    virtual void lidarComSolicitacao(const string& solicitacao) = 0; // função virtual que deve ser implementada nas outras classes
+};
+
+// garçom: elo inicial dos handlers
+class Garcom : public ManipuladorSolicitacao {
+public:
+    void lidarComSolicitacao(const string& solicitacao) override { // análise da solicitação
+        if (solicitacao == "algo deu errado") {
+            cout << "garçom: chamando o gerente" << endl;
+            proximo->lidarComSolicitacao(solicitacao);
+        } else if (solicitacao == "deu tudo certo"){
+            cout << "garçom: levando a comanda pro chef" << endl;
+            proximo->lidarComSolicitacao(solicitacao);
+        }
+    }
+};
+
+// Gerente: proximo elo dos handlers, se tiver algo errado
+class Gerente : public ManipuladorSolicitacao {
+public:
+    void lidarComSolicitacao(const string& solicitacao) override {
+        if (solicitacao == "algo deu errado") {
+            cout << "gerente: avaliando o problema e cancela o pedido" << endl;
+            //proximo->lidarComSolicitacao(solicitacao); encerra a solicitação. nesse exemplo de código, não há possibilidade que o
+            // problema seja suficientemente resolvido e o pedido seja encaminhado para a cozinha.
+        } else {
+            // não faz nada, pois somente é chamado em casos de problema, portanto, ele encerra a solicitação de ambos os jeitos.
+        }
+    }
+};
+
+// chef: último elo
+class Chef : public ManipuladorSolicitacao {
+public:
+    void lidarComSolicitacao(const string& solicitacao) override {
+        if (solicitacao == "deu tudo certo") {
+            cout << "chef: preparando o pedido" << endl;
+            //termina a solicitação
+        } else {
+            // não possui. nesse código, não há a possibilidade do cliente pedir que o garçom devolva o pedido
+        }
+    }
+};
+
+int main() {
+    // Criando os manipuladores
+    Garcom garcom;
+    Gerente gerente;
+    Chef chef;
+
+    // Configurando a cadeia de responsabilidade
+    garcom.setProximo(&gerente);
+    gerente.setProximo(&chef);
+
+    // Simulando uma solicitação
+    cout << "cliente: insira problema aqui." << endl;
+    garcom.lidarComSolicitacao("algo deu errado");
+
+    return 0;
+}
+```
