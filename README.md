@@ -10,3 +10,4 @@ O código que construi o objeto pode ser removido de sua classe e separada em ob
 Para lidar com as possíveis diferentes demandas de construção, como por exemplo um carro blindado ou um ônibus, podemos ter várias classes de construtor, cada uma implementando os mesmos passos, mas de maneiras diferentes. Assim, teremos várias versões do objeto final. No entanto, isso somente funcionaria se o código do cliente que chama os métodos de construção possui habilidade de interação com os construtores, utilizando de uma interface em comum.
 
 Adicionalmente, esses passos para construir um certo objeto podem ser extraídos e colocados em uma classe separada chamada _director_. Ela irá definir a ordem em que esses passos serão executados, enquanto o builder lhe dá a implementação para esses passos. Não é uma classe obrigatória, porém, é fortemente recomendável.
+![structure](https://github.com/connorharu/Padroes-de-Projeto/assets/142368559/bf18dbe4-227b-4dfe-8fc3-e208ac7b176e)
