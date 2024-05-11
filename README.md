@@ -160,4 +160,83 @@ _Texto ALT: diagrama UML sobre o padrão de criação Decorator. Imagem retirada
 
 ### Código de exemplo
 ```cpp
+#include <iostream>
+using namespace std;
+
+// Classe base: Café
+class Cafe {
+    // atributos de café aqui
+public:
+    virtual string preparar() { // retorna uma string com o café preparado, com adicionais, se houverem
+        return "Café";
+    }
+};
+
+// wrapper de adição de leite
+class AdicaoLeite : public Cafe { // herda o método preparar de Cafe
+private:
+    Cafe* cafe; // aponta para um objeto de tipo Cafe
+public:
+    AdicaoLeite(Cafe* cafe) { // construtor de AdicaoLeite, que recebe um ponteiro para um objeto Cafe
+        this->cafe = cafe;
+    } 
+
+    string preparar() override {
+        return cafe->preparar() + ", com leite"; // override no preparar para adição de leite
+    }
+};
+
+// wrapper de adição de açúcar
+class AdicaoAcucar : public Cafe { // herda o método preparar de Cafe
+private:
+    Cafe* cafe; // aponta para um objeto de tipo Cafe
+public:
+    AdicaoAcucar(Cafe* cafe) { // construtor de AdicaoAcucar, que recebe um ponteiro para um objeto Cafe
+        this->cafe = cafe;
+    }
+
+    string preparar() override {
+        return cafe->preparar() + ", com açúcar"; // override no preparar para adição de açúcar
+    }
+};
+
+// wrapper: adição de canela
+class AdicaoCanela : public Cafe { // herda o método preparar de Cafe
+private:
+    Cafe* cafe; // aponta para um objeto de tipo Cafe
+public:
+    AdicaoCanela(Cafe* cafe) { // construtor de AdicaoCanela, que recebe um ponteiro para um objeto Cafe
+        this->cafe = cafe;
+    }
+
+    string preparar() override {
+        return cafe->preparar() + ", com canela"; // override no preparar para adição de canela
+    }
+};
+
+int main() {
+    // café básico
+    Cafe* cafe = new Cafe();
+    cout << cafe->preparar() << endl; // saída: café
+
+    // café com Leite
+    Cafe* cafe_com_leite = new AdicaoLeite(cafe);
+    cout << cafe_com_leite->preparar() << endl; // saída: café, com leite
+
+    // café com leite e açúcar
+    Cafe* cafe_com_leite_e_acucar = new AdicaoAcucar(cafe_com_leite);
+    cout << cafe_com_leite_e_acucar->preparar() << endl; // saída: café, com leite e açúcar
+
+    // café com leite, açúcar e canela
+    Cafe* cafe_com_leite_e_acucar_e_canela = new AdicaoCanela(cafe_com_leite_e_acucar);
+    cout << cafe_com_leite_e_acucar_e_canela->preparar() << endl; // saída: café, com leite, açúcar e canela
+
+    delete cafe_com_leite_e_acucar_e_canela;
+    delete cafe_com_leite_e_acucar;
+    delete cafe_com_leite;
+    delete cafe;
+
+    return 0;
+}
 ```
+## 
