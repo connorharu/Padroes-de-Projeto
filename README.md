@@ -12,10 +12,11 @@ Para lidar com as possíveis diferentes demandas de construção, como por exemp
 Adicionalmente, esses passos para construir um certo objeto podem ser extraídos e colocados em uma classe separada chamada _director_. Ela irá definir a ordem em que esses passos serão executados, enquanto o builder lhe dá a implementação para esses passos. Não é uma classe obrigatória, porém, é fortemente recomendável.
 
 ![structure](https://github.com/connorharu/Padroes-de-Projeto/assets/142368559/bf18dbe4-227b-4dfe-8fc3-e208ac7b176e)
+
 _Texto ALT: diagrama UML sobre o padrão de criação Builder. Imagem retirada do site refactoring.guru_.
 
 ### Código de exemplo
-```
+```cpp
 #include <iostream>
 #include <string>
 #include <stdlib.h>
